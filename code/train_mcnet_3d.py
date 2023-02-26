@@ -129,11 +129,7 @@ if __name__ == "__main__":
         for i_batch, sampled_batch in enumerate(trainloader):
             
             volume_batch, label_batch = sampled_batch['image'], sampled_batch['label']
-            print(volume_batch.shape)
-            print(label_batch.shape)
             volume_batch, label_batch = volume_batch.cuda(), label_batch.cuda()
-            print(volume_batch.shape)
-            print(label_batch.shape)
             model.train()
             outputs = model(volume_batch)
             outputs = outputs.unsqueeze(0)
