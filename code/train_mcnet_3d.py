@@ -135,6 +135,7 @@ if __name__ == "__main__":
 
             model.train()
             outputs = model(volume_batch)
+            outputs = outputs.unsqueeze(0)
             num_outputs = len(outputs)
 
             y_ori = torch.zeros((num_outputs,) + outputs[0].shape)
