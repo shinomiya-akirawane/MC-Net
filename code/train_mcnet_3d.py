@@ -90,6 +90,8 @@ if __name__ == "__main__":
     logging.info(str(args))
     
     model = net_factory(net_type=args.model, in_chns=1, class_num=num_classes, mode="train")
+    print(num_classes)
+    print('-------------------')
     if args.dataset_name == "LA":
         db_train = LAHeart(base_dir=train_data_path,
                         split='train',
