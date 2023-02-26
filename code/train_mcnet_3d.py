@@ -144,6 +144,7 @@ if __name__ == "__main__":
             loss_seg_dice = 0 
             for idx in range(num_outputs):
                 y = outputs[idx][:labeled_bs,...]
+                print(outputs.shape)
                 y_prob = F.softmax(y, dim=1)
                 #loss_seg += F.cross_entropy(y[:labeled_bs], label_batch[:labeled_bs])
                 print(y.shape)
