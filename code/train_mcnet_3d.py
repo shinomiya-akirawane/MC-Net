@@ -90,8 +90,6 @@ if __name__ == "__main__":
     logging.info(str(args))
     
     model = net_factory(net_type=args.model, in_chns=1, class_num=num_classes, mode="train")
-    print(num_classes)
-    print('-------------------')
     if args.dataset_name == "LA":
         db_train = LAHeart(base_dir=train_data_path,
                         split='train',
@@ -141,16 +139,12 @@ if __name__ == "__main__":
             y_ori = torch.zeros((num_outputs,) + outputs[0].shape)
             y_pseudo_label = torch.zeros((num_outputs,) + outputs[0].shape)
 
-            #loss_seg = 0
+            loss_seg = 0
             loss_seg_dice = 0 
             for idx in range(num_outputs):
                 y = outputs[idx][:labeled_bs,...]
-                print(outputs.shape)
                 y_prob = F.softmax(y, dim=1)
-                #loss_seg += F.cross_entropy(y[:labeled_bs], label_batch[:labeled_bs])
-                print(y.shape)
-                print((y_prob[:,1,...]).shape)
-                print((label_batch[:labeled_bs,...] == 1).shape)
+                loss_seg += F.cross_entropy(y[:labeled_bs], label_batch[:labeled_bs])
                 loss_seg_dice += dice_loss(y_prob[:,1,...], label_batch[:labeled_bs,...] == 1)
 
                 y_all = outputs[idx]
@@ -174,7 +168,7 @@ if __name__ == "__main__":
             logging.info('iteration %d : loss : %03f, loss_d: %03f, loss_cosist: %03f' % (iter_num, loss, loss_seg_dice, loss_consist))
         
             writer.add_scalar('Labeled_loss/loss_seg_dice', loss_seg_dice, iter_num)
-            #writer.add_scalar('Labeled_loss/loss_seg_ce', loss_seg, iter_num)
+            writer.add_scalar('Labeled_loss/loss_seg_ce', loss_seg, iter_num)
             writer.add_scalar('Co_loss/consistency_loss', loss_consist, iter_num)
             writer.add_scalar('Co_loss/consist_weight', consistency_weight, iter_num)
 
